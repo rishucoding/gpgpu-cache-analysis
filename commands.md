@@ -1,6 +1,7 @@
 ### Mounting host file system in docker: 
+Assume you have a gpgpu-sim diretory which you wish access in the docker. It will mounted in the copy directory.
 ```sh
-docker run -v ~/gpgpu-sim:~/ -w /root -it socalucr/gpgpu-sim /bin/bash
+docker run -v ~/gpgpu-sim:/root/copy -w /root -it socalucr/gpgpu-sim /bin/bash
 ```
 
 ### Running benchmarks:
