@@ -16,3 +16,11 @@ Inside test directory:
 ```sh
 ~/ispass2009-benchmarks/bin/release/BFS ~/ispass2009-benchmarks/BFS/data/graph65536.txt > log
 ```
+
+```sh
+~/ispass2009-benchmarks/bin/release/BFS ~/ispass2009-benchmarks/BFS/data/graph65536.txt > bfs
+time ~/ispass2009-benchmarks/bin/release/RAY 256 256 > ray
+time ~/ispass2009-benchmarks/CP/benchmarks/cp/build/cuda_short/cp > cp
+time ~/ispass2009-benchmarks/bin/release/STO > sto
+```
+
