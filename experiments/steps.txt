@@ -1,0 +1,11 @@
+First part of experiments is to replicate figure 1 and 2 from the paper. For that we need to find following parameters from gpgpu sim statistics.
+Parameters for Figure 1:
+1. Replication Ratio : Number of L1 cache misses present in other core caches/total cache misses.
+	For this parameter we need to find out following places in the code. 
+		1. Where are misses being identified: This is done in 'get_sub_stats' function in gpu-cache.cc file. 
+		2. How are they determine that a particular cache access is miss or hit : Still need to find out.  
+2. L1 miss rate : This parameter is present directly in stats file
+3. Speed up with cache size improvement : We can caclculate speedup by observing IPC improvements with cache size. 
+
+
+
