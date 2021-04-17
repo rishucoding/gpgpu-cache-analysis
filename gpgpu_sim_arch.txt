@@ -1,0 +1,19 @@
+simt core cluster ----- shader.h ----- simt_core_cluster (class name) - this has stats objects also 
+object in gpu_sim.cc --- m_cluster
+memory_config struct in gpgpu-sim.cc --- dram_configuration
+shader_core_config class --- shader.h -- present in simt_core_cluster -- contains l1d_configuration
+m_L1D : l1_cache object
+
+shader.cc
+memory_cycle() -> (if cache is enabled)process_memory_access_queue()
+This step could be helpful for us
+->process_cache_access() : function removing from queue if miss
+acceessq_pop_back() : warp_inst_t class function
+warp_inst_t is present in abstract_hardware_model.h file
+mem_access_t class contains address, size, different parameters related to memory access.
+accessq_count()
+
+
+
+shader_core_ctx is class of shader core. possible global variable : gpu
+where are shader_core_ctx is being called
