@@ -28,4 +28,10 @@ if it is a miss m_rd_miss() function is called. This is also present in data_cac
 There is a miss queue for each core probably. 
 rd_miss_base() --- send_read_request() function. in this function they are checking whether mshr has this address or not, if not mshr_avail? 
 
+checking mshr to lower level memory access. 
+checking data_cache class cycle() function. from this mem_fetch_interface class.
+mshr_table() class is present in gpu-cache.h. object for mshr_table is m_mshrs
+
+I am thinking that if there is l1 cache miss, they are reading from l2_cache because mshr is waiting on lower memory fill signals.
+
 
