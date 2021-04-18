@@ -17,3 +17,15 @@ accessq_count()
 
 shader_core_ctx is class of shader core. possible global variable : gpu
 where are shader_core_ctx is being called
+
+What happens after a request is sent to cache: everything is in gpu-cache.cc
+m_L1D --- object of l1_cache
+access is happenning using access() function of l1_cache
+l1_cache --- inherits from data_cache class. 
+l1_cache access() function calls data_cache access function. 
+data_cache access function is calling tag_array probe() function for cache lookup. after receiving the response process_tag_probe() function is called.
+if it is a miss m_rd_miss() function is called. This is also present in data_cache class. --- rd_miss_base()
+There is a miss queue for each core probably. 
+rd_miss_base() --- send_read_request() function. in this function they are checking whether mshr has this address or not, if not mshr_avail? 
+
+
