@@ -1,0 +1,92 @@
+* Returning the configuration of the shader core, used by the functional simulation only so far
+    */
+   const struct shader_core_config * getShaderCoreConfig();
+   
+ shader_core_config m_shader_config;
+ 
+ 
+ under configuration paramters
+ const struct shader_core_config *m_shader_config;	
+ 
+ 
+Using m_shader_config: In gpgpu-sim.cc
+ 
+ m_cluster = new simt_core_cluster*[m_shader_config->n_simt_clusters];
+    for (unsigned i=0;i<m_shader_config->n_simt_clusters;i++)
+******* here this means the gpu object ************
+        m_cluster[i] = new simt_core_cluster(this,i,m_shader_config,m_memory_config,m_shader_stats,m_memory_stats);
+
+icnt_wrapper_init();
+    icnt_create(m_shader_config->n_simt_clusters,m_memory_config->m_n_mem_sub_partition);
+    
+
+num_cores+=m_shader_config->n_simt_cores_per_cluster;
+
+
+
+ 834 void gpgpu_sim::change_cache_config(FuncCache cache_config)
+ 835 {
+ 836         if(cache_config != m_shader_config->m_L1D_config.get_cache_status()){
+ 837                 printf("FLUSH L1 Cache at configuration change between kernels\n");
+ 838                 for (unsigned i=0;i<m_shader_config->n_simt_clusters;i++) {
+ 839                         m_cluster[i]->cache_flush();
+ 840             }
+
+
+gpu-cache.h
+class cache_config {}
+
+Has lots of details of setting cache_config.
+
+In shader.h
+//This is the class for a core
+class shader_core_ctx : public core_t {
+public:
+    // creator:
+    shader_core_ctx( class gpgpu_sim *gpu,
+                     class simt_core_cluster *cluster,
+                     unsigned shader_id,
+                     unsigned tpc_id,
+                     const struct shader_core_config *config,
+                     const struct memory_config *mem_config,
+                     shader_core_stats *stats );
+                     
+
+
+
+hierarchy is: gpgpu-sim --> cluster --> shader_core --> LDST --> L1_D$
+//This is the class for a cluster
+class simt_core_cluster {
+public:
+    simt_core_cluster( class gpgpu_sim *gpu,
+                       unsigned cluster_id,
+                       const struct shader_core_config *config,
+                       const struct memory_config *mem_config,
+                       shader_core_stats *stats,
+                       memory_stats_t *mstats );
+
+    void core_cycle();
+    void icnt_cycle();
+    
+simt_core_cluster::simt_core_cluster( class gpgpu_sim *gpu,
+                                      unsigned cluster_id,
+                                      const struct shader_core_config *config,
+                                      const struct memory_config *mem_config,
+                                      shader_core_stats *stats,
+                                      class memory_stats_t *mstats )
+{
+    m_config = config;
+    m_cta_issue_next_core=m_config->n_simt_cores_per_cluster-1; // this causes first launch to use hw cta 0
+    m_cluster_id=cluster_id;
+    m_gpu = gpu;
+    m_stats = stats;
+    m_memory_stats = mstats;
+    m_core = new shader_core_ctx*[ config->n_simt_cores_per_cluster ];
+    for( unsigned i=0; i < config->n_simt_cores_per_cluster; i++ ) {
+        unsigned sid = m_config->cid_to_sid(i,m_cluster_id);
+        m_core[i] = new shader_core_ctx(gpu,this,sid,m_cluster_id,config,mem_config,stats);
+        m_core_sim_order.push_back(i);
+    }
+}
+
+
