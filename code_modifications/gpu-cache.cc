@@ -1074,7 +1074,7 @@ data_cache::access( new_addr_type addr,
     bool wr = mf->get_is_write();
     new_addr_type block_addr = m_config.block_addr(addr);
     unsigned cache_index = (unsigned)-1;
-	std::cout <<"block address inside the function"<<block_addr << "\n";
+	//std::cout <<"block address inside the function"<<block_addr << "\n";
     enum cache_request_status probe_status
         = m_tag_array->probe( block_addr, cache_index );
     enum cache_request_status access_status

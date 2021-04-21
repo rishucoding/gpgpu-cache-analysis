@@ -1345,14 +1345,14 @@ mem_stage_stall_type ldst_unit::process_memory_access_queue( cache_t *cache, war
 	//std::cout<<this->m_sid<<"Pranitha \n";                     
 	//std::cout<<this->m_core->get_gpu()->getSIMTCluster()[curr_cid].get_shader_core_object()[0]->get_sid()<<"line2 \n";
 	
-	std::cout << "status before" << status <<"\n";
+	//std::cout << "status before" << status <<"\n";
 	enum cache_request_status temp_status;
 	l1_cache* temp = this->m_core->get_gpu()->getSIMTCluster()[curr_cid]->get_shader_core_object()[0]->m_ldst_unit->m_L1D;
 	new_addr_type blk_addr = temp->m_config.block_addr(mf->get_addr());
 	unsigned cache_idx = (unsigned) -1;
 	temp_status = temp->m_tag_array->probe(blk_addr,cache_idx);
-	std::cout <<"block address"<<blk_addr << "\n";
-	std::cout <<"Status after"<<temp_status << "\n\n";
+	//std::cout <<"block address"<<blk_addr << "\n";
+	//std::cout <<"Status after"<<temp_status << "\n\n";
 	
 	//replication code
 	if(status == MISS){
@@ -1364,9 +1364,9 @@ mem_stage_stall_type ldst_unit::process_memory_access_queue( cache_t *cache, war
 			blk_addr = temp->m_config.block_addr(mf->get_addr());
 			cache_idx = (unsigned) -1;
 			temp_status = temp->m_tag_array->probe(blk_addr,cache_idx);
-			if(temp_status ==HIT)
+			if(temp_status ==HIT || temp_status == HIT_RESERVED)
 			{
-				std::cout<<"Replication found for core with id"<<curr_cid<<"\n";
+				std::cout<<"Replication found "<<"\n";
 				break;
 			}
 
