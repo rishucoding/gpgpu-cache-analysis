@@ -1342,9 +1342,17 @@ mem_stage_stall_type ldst_unit::process_memory_access_queue( cache_t *cache, war
         //std::cout <<"Status of the cache access Pranitha"<< status;
         unsigned curr_cid = this->m_tpc ; 
 	//m_tpc is cluster_id
-	std::cout<<this->m_sid<<"Pranitha \n";                     
+	//std::cout<<this->m_sid<<"Pranitha \n";                     
 	//std::cout<<this->m_core->get_gpu()->getSIMTCluster()[curr_cid].get_shader_core_object()[0]->get_sid()<<"line2 \n";
-	std::cout<<this->m_core->get_gpu()->getSIMTCluster()[curr_cid]->get_shader_core_object()[0]->get_sid()<<"line2 \n";
+	
+	std::cout << "status before" << status <<"\n";
+	enum cache_request_status temp_status;
+	l1_cache* temp = this->m_core->get_gpu()->getSIMTCluster()[curr_cid]->get_shader_core_object()[0]->m_ldst_unit->m_L1D;
+	new_addr_type blk_addr = temp->m_config.block_addr(mf->get_addr());
+	unsigned cache_idx = (unsigned) -1;
+	temp_status = temp->m_tag_array->probe(blk_addr,cache_idx);
+	std::cout <<"block address"<<blk_addr << "\n";
+	std::cout <<"Status after"<<temp_status << "\n\n";	
 	//std::cout<<this->m_core->get_gpu()->getShaderCoreConfig()->n_simt_clusters<<"line2 \n";        
 //if(cache == this->m_core->get_gpu()->getSIMTCluster()[curr_cid]->get_shader_core_object()[0]->get_ldst_unit_object()->get_L1D_object())
         //{ 

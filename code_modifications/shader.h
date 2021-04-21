@@ -1092,7 +1092,7 @@ public:
     void fill( mem_fetch *mf );
     void flush();
     void writeback();
-
+l1_cache *m_L1D;
     // accessors
     virtual unsigned clock_multiplier() const;
 
@@ -1165,7 +1165,7 @@ protected:
 
    tex_cache *m_L1T; // texture cache
    read_only_cache *m_L1C; // constant cache
-   l1_cache *m_L1D; // data cache
+   //l1_cache *m_L1D; // data cache
    std::map<unsigned/*warp_id*/, std::map<unsigned/*regnum*/,unsigned/*count*/> > m_pending_writes;
    std::list<mem_fetch*> m_response_fifo;
    opndcoll_rfu_t *m_operand_collector;
@@ -1735,6 +1735,7 @@ public:
 
 	 void inc_simt_to_mem(unsigned n_flits){ m_stats->n_simt_to_mem[m_sid] += n_flits; }
 	 bool check_if_non_released_reduction_barrier(warp_inst_t &inst);
+ldst_unit *m_ldst_unit;
 
 	private:
 	 unsigned inactive_lanes_accesses_sfu(unsigned active_count,double latency){
@@ -1818,7 +1819,7 @@ public:
     std::vector<pipeline_stage_name_t> m_dispatch_port;
     std::vector<pipeline_stage_name_t> m_issue_port;
     std::vector<simd_function_unit*> m_fu; // stallable pipelines should be last in this array
-    ldst_unit *m_ldst_unit;
+    //ldst_unit *m_ldst_unit;
     static const unsigned MAX_ALU_LATENCY = 512;
     unsigned num_result_bus;
     std::vector< std::bitset<MAX_ALU_LATENCY>* > m_result_bus;
