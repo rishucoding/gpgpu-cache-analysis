@@ -1352,7 +1352,27 @@ mem_stage_stall_type ldst_unit::process_memory_access_queue( cache_t *cache, war
 	unsigned cache_idx = (unsigned) -1;
 	temp_status = temp->m_tag_array->probe(blk_addr,cache_idx);
 	std::cout <<"block address"<<blk_addr << "\n";
-	std::cout <<"Status after"<<temp_status << "\n\n";	
+	std::cout <<"Status after"<<temp_status << "\n\n";
+	
+	//replication code
+	if(status == MISS){
+	for(unsigned i=0;i<this->m_core->get_config()->n_simt_clusters;i++)
+	{
+		if(i!=curr_cid)
+		{
+			temp = this->m_core->get_gpu()->getSIMTCluster()[i]->get_shader_core_object()[0]->m_ldst_unit->m_L1D;
+			blk_addr = temp->m_config.block_addr(mf->get_addr());
+			cache_idx = (unsigned) -1;
+			temp_status = temp->m_tag_array->probe(blk_addr,cache_idx);
+			if(temp_status ==HIT)
+			{
+				std::cout<<"Replication found for core with id"<<curr_cid<<"\n";
+				break;
+			}
+
+		}
+	}}
+		
 	//std::cout<<this->m_core->get_gpu()->getShaderCoreConfig()->n_simt_clusters<<"line2 \n";        
 //if(cache == this->m_core->get_gpu()->getSIMTCluster()[curr_cid]->get_shader_core_object()[0]->get_ldst_unit_object()->get_L1D_object())
         //{ 
